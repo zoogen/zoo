@@ -705,7 +705,7 @@ body.no-literate .content pre > code:hover::-webkit-scrollbar-thumb {
   -o-transition: color 0.1s ease;
   -ms-transition: color 0.1s ease;
   transition: color 0.1s ease;
-  font-size: 13px;
+  font-size: 16px; /* formerly 13px */
   color: #959595;
   display: block;
 }
@@ -972,3 +972,9 @@ Trent
   unicode-bidi: bidi-override;
   direction: rtl;
 }
+/* Make fonts bigger */
+body {
+  font-size: 110%;
+  vertical-align: baseline;
+}
+

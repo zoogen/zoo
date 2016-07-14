@@ -1,7 +1,7 @@
 
 # Language
 
-This is an introduction to the Zoo language.
+This is an introduction to the Zoo language, which is a work in progress.
 
 ## Goals
 
