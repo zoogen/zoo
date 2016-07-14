@@ -1,11 +1,16 @@
 
 # Language
 
-This is an introduction to the Zoo language, which is a work in progress.
+This is an introduction to the Zoo Language, which is a work in progress.
+
+Feedback is welcome at
+<a href="mailto:lexads@zxoo.xai"
+    onmouseover="this.href=this.href.replace(/x/g,'');" class="reverse">ia.ooz@sdael</a>
+
 
 ## Goals
 
-The primary goals of the Zoo language are --
+The primary goals of the Zoo Language are --
 
 * Safe hot-swap
 * Definition-based ("executable specifications")
@@ -123,7 +128,7 @@ The definitions of the parameters are inferred by the usages applied to them in 
 add (a b) = a + b  // + requires Numbers
 ```
 
-In the definition of `add`, `+` takes arguments of type `Number`, so `inc`'s parameters `a` and `b` must be numbers too.
+In the definition of `add`, `+` takes arguments of type `Number`, so `inc`'s parameters `a` and `b` must be `Number`s too.
 
 ### Where
 
@@ -311,7 +316,7 @@ Number comparison is ordinary.
     1 == 2   // False
     1 < 2    // True
     1 <= 2   // True
-    1 > 2    // false
+    1 > 2    // False
     1 >= 2   // False
 
 
