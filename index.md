@@ -28,7 +28,7 @@ __RUNTIME FORMAL VERIFICATION__
  * Safe hot-swapping without downtime
  * Automated verification for reliability & security
  
-Software is becoming more foundational to how the world works. Improving software quality and accelerating its development is extremely high-leverage.
+Software is foundational to how the world works. Improving software quality and accelerating its development is extremely high-leverage.
 
 
 # Ecosystem
@@ -47,22 +47,13 @@ Ecosystem code is open source, and the behavior of the ecosystem itself is open.
 
 ## Safe
 
-The Zoo language is definition-based, which enables automated formal verification of most code. Those strong guarantees can make it safe for even third-party code to integrate automatically into your system. This can dramatically accelerate the development of robust software.
+The Zoo language is definition-based, which enables automated formal verification of code. Those strong guarantees can make it safe for even third-party code to integrate automatically into your system. This can dramatically accelerate the development of robust software.
 
 
 
 # Language
 
-The Zoo language has the noble goal of elevating the art of software development for teams and individuals to feel --
-
-| More Like     | Less Like
-| ------------- |:-------------:|
-| having superpowers | dying a thousand deaths |
-| being the gods of your own universe | navigating a minefield in the dark |
-| designing a cathedral with your mind | wrestling the machine into submission |
-| inventing with legos | untangling a coiled mess of rope |
-| being in a state of flow | running in a hamster wheel |
-| painting on a canvas | gluing together someone's broken vase |
+The Zoo language has the noble goal of elevating the art of software development for teams and individuals to feel more like designing and architecting and less like wrestling the machine into submission.
 
 We'd like to push the state of the art in practical general-purpose language design. We're going for simple, orthogonal, composable semantic constructs that can model anything with tasteful syntax.
 
@@ -73,24 +64,15 @@ Zoo selectively borrows much from academic work and many existing languages, and
 
 Definitions are the basis for the syntax and semantics of the Zoo language. They share similarities with the constructs in design-by-contract and constraints-based languages, but are different enough to deserve their own nomenclature.
 
-Zoo's definitions allows a high level of abstraction that maps closely with the minds of developers, rather than forcing their thinking into a paradigm that's convenient for the machine. This doesn't mean Zoo is slow, and it doesn't mean Zoo can't operate on a low level of abstraction -- just that the priority is convenience for the human, not the machine.
+Their goal is "flexibility with discipline" where any system can be modeled with the constraints of that domain. Definitions allows a high level of abstraction that maps closely with the minds of developers, rather than forcing their thinking into a paradigm that's convenient for the machine. 
 
 In Zoo, you don't typically model common data structures or algorithms. You'll usually pick a predefined definition (e.g. "List", "Sort"), and the runtime will automatically pick an implementation that satisfies that definition (e.g. "LinkedList", "QuickSort"). The runtime may dynamically change what implementation is used, depending on how the current state of the system compares to its resource limits and performance goals.
-
-Zoo developers don't typically need to think about RAM vs Disk memory either, or execution efficiency. The runtime is resource-aware and auto-optimizing.
-
-
-## Human-Centric
-
-Zoo tries to move code a bit closer towards a codified form of conceptual composition. It goes for "flexibility with discipline" where it can model any system with whatever constraints.
-
-There are lots of ideas we like for making code more readable and predictable while still remaining sufficiently precise and executable. You should [read about the language](/language.html#top) to get more of a flavor.
 
 
 
 # Community
 
-Please share your feedback.
+Please share your feedback!
 
 The lead developers can be reached at
 <a href="mailto:lexads@zxoo.xai"
