@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width">
+
+  <title>Exercises</title>
+
+  <!-- Flatdoc -->
+  <script src='assets/support/vendor/jquery.js'></script>
+  <script src='assets/legacy.js'></script>
+  <!-- <script src="assets/highlightJs/build/highlight.pack.js"></script> -->
+  <!-- <link  href='assets/highlightJs/src/styles/xcode.css' rel='stylesheet'> -->
+  <!-- <link rel="stylesheet" href="./assets/octicons/octicons.css"> -->
+  <script src='assets/flatdoc.js'></script>
+
+  <!-- Flatdoc theme -->
+  <link  href='assets/theme-white/style.css' rel='stylesheet'>
+  <script src='assets/theme-white/script.js'></script>
+  <link  href='assets/support/theme.css' rel='stylesheet'>
+  <script src='assets/support/theme.js'></script>
+
+  <!-- Initializer -->
+  <script>
+    Flatdoc.run({
+      // fetcher: function(callback) {
+      //   callback(null, document.getElementById('markdown').innerHTML);
+      // }
+      // fetcher: Flatdoc.file('http://localhost:8000/index.md') // requires local server
+      fetcher: Flatdoc.file('exercises.md') // requires local server
+    });
+  </script>
+
+
+  <!-- Initializer -->
+<!--   <script>
+    Flatdoc.run({
+      fetcher: Flatdoc.file('http://localhost:8000/index.md') // requires local server
+    });
+  </script>
+ -->
+  <!-- Meta -->
+  <meta property="og:image" content="./assets/images/CubeRed598_614.png" />
+  <meta property="og:image:secure_url" content="./assets/images/CubeRed598_614.png" />
+  <meta property="og:image:type" content="assets/image/jpeg" />
+  <meta property="og:image:width" content="1196" />
+  <meta property="og:image:height" content="1228" />
+
+  <meta content="Zoo: ..." name="description">
+  <meta content="Zoo: ..." property="og:description">
+
+</head>
+<body role='flatdoc' class='big-h3 large-brief'>
+
+  <div class='title-area title-card'>
+    <div class='in'>
+      <img src="assets/images/animals.png" style="max-width:598px; width:80%; padding-left:10%; padding-right:10%; -webkit-user-select:none; cursor:default"></img>
+      <!-- <div class='big-zoo'>Zoo</div> -->
+    </div>
+  </div>
+
+  <div id="top"></div>
+
+  <div class='header'>
+    <div class='left'>
+
+      <ul>
+        <li>
+          <div class='tab'>
+            <a href='exercises.html#top'>Exercises</a>
+          </div>
+        </li>
+        <!-- <li> -->
+          <!-- <div class='tab'> -->
+            <!-- <a href='language.html#top'>Language</a> -->
+          <!-- </div> -->
+        <!-- </li> -->
+        <!-- <li> -->
+          <!-- <div class='tab'> -->
+            <!-- <a href='community.html'>Community</a> -->
+          <!-- </div> -->
+        <!-- </li> -->
+      </ul>
+
+    </div>
+  </div>
+
+  <div class='content-root'>
+    <div class='menubar'>
+      <div class='menu section' role='flatdoc-menu'></div>
+    </div>
+    <div role='flatdoc-content' class='content'></div>
+  </div>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 
 # Language
 
-This is an introduction to the Zoo Language, which is a work in progress.
+This is the aspirational design of the Zoo Programming Language. It's a work in progress.
 
 Feedback is welcome at
 <a href="mailto:lexads@zxoo.xai"
@@ -20,32 +20,43 @@ The primary goals of the Zoo Language are --
 * Model any system at any level of granularity
 * Backwards and forwards compatible
 * Simple AST that converts to readable code
+* No line between program and database
+* Anonymous Types
+* Strongly typed runtime metaprogramming
 
 ## Features
 
-Zoo tends to fit these characterizations --
+What's relatively unique --
+
+* Design-by-definition
+* Asynchronous-by-default
+* Term rewriting
+* Time semantics
+* Multi-typing (same thing can be multiple types)
+* Language profiles
+* Flow typing
+* Prototype-based (not class-based)
+* Automatic concurrency
+* Automatic thread safety
+* Automatic persistent data
+* Predicate dispatch
+
+Zoo also tends to fit these characterizations --
 
 * Declarative
 * Strongly-typed
 * Stateful
 * Lexically scoped
-* Term rewriting
-* Design-by-contract
 * Type inference
-* Nominally typed
-* Flow typing
+* Structurally typed
 * Dependent types
 * Call-by-sharing
-* Prototype-based (not class-based)
 * Automatic memory management
-* Automatic concurrency
-* Automatic thread safety
 * Constraint-programming
 * Safe-by-default
 * Immutable-by-default
 * Private-by-default
-* Asynchronous-by-default
-* Reflective, Metaprogramming, and Macros
+* Reflective, metaprogramming
 * Deterministic, non-deterministic
 * High-level, low-Level, any-level
 
@@ -54,7 +65,13 @@ Zoo tends to fit these characterizations --
 
 Definitions are a single construct that model what types, functions, and state do in other languages.
 
-A *definition* takes the form `signature = meaning`. Everything in Zoo is a definition or a *usage* of an existing definition. 
+A *definition* takes the form `signature = meaning`. The meaning substitutes for the signature.
+
+A *usage* takes the form `signature`.
+
+The *meaning* of a definition is composed of usages. 
+
+Everything in Zoo is a definition or a usage. 
 
 ```
 x = 1    // definition
@@ -63,9 +80,10 @@ print x  // usage
 
 (Use `//` for single-line comments)
 
-The *meaning* of a definition is composed of usages. The meaning substitutes for the signature.
+For `x = 1`, `x` is the signature, `1` is the meaning. So, `1` substitutes for `x`.
 
-For `x = 1`, `x` is the signature and `1` is it's meaning, which is a usage of the previously-defined definition `1`. So, `1` substitutes for `x`.
+`1` is actually a usage of a pre-defined definition. 
+
 
 ## Parameters
 
@@ -73,7 +91,7 @@ Definitions can have parameters.
 
     inc (a) = a + 1
 
-Usages can have arguments.
+Usages can have arguments that replace the parameters.
 
     print inc 2  // 3
 
@@ -90,7 +108,7 @@ Usages can have arguments.
 
 ### Parentheses
 
-In signatures, parentheses are required to indicate parameters. In signatures and usages, they also demarcate precedence.
+In signatures, parentheses are required to indicate parameters. In signatures and usages, they also demarcate precedence, if only for clarity.
 
 ```
 a = 1
@@ -136,16 +154,16 @@ You can also further define `a` and `b` in the indented inner scope.
 
 ```
 add (a b) = a + b
-    a = Number
-    b = Number
+    a : Number
+    b : Number
 ```
 
 Read that as: "`add (a b) = a + b` *where* `a` and `b` are both `Number`s".
 
-You can also define parameters in the signature.
+You can also define parameters in the signature, using `:`.
 
 ```
-add (a=Number) (b=Number) = a + b
+add (a:Number) (b:Number) = a + b
 ```
 
 ### Variadic
@@ -203,7 +221,7 @@ Postfix.
 
     (amount) kg = Kilograms amount
 
-Madlibs.
+Mad Libs.
 
     add (a) to (b) = a + b
 
@@ -212,18 +230,18 @@ Madlibs.
 
 The *meaning* (the right-hand-side of an `=`) come in three forms --
 
-Function-style, where the signature substitutes for another expression.
+*Function-style*, where the signature substitutes for another expression.
 
     inc (a) = a + 1
 
-Procedure-style, where the signature substitutes for nothing.
+*Procedure-style*, where the signature substitutes for nothing.
 
     print (a) = ()
 
-Record-style, where the signature substitutes for the thing itself.
+*Record-style*, where the signature substitutes for the thing itself.
 
     Person (name) =
-        .name = name
+        . name = name
 
 
 ## Context Signatures
@@ -231,12 +249,19 @@ Record-style, where the signature substitutes for the thing itself.
 A *context signature* is a signature defined in the inner scope of a record-style definition, which refers to the definition.
 
     Person (name) =
-        .name = name
+        (this) name = name
         name-of (this) =
-            print this.name
+            print (this name)
 
     p = Person (name="Mel")
     name-of p  // "Mel"
+
+A `.` is sugar for `(this)`, so you could do this --
+
+    Person (name) =
+        . name = name
+        name-of . =
+            print . name
 
 Two different definitions can each have context signatures that share a name (e.g. `name-of`) without colliding in the namespace.
 
@@ -261,8 +286,8 @@ map ((a)=a+1) (List 1 2 3)  // (a)=a+1 is anonymous
 
 Commas are used for repetition.
 
-    x, y = int  // x and y are both int
-    z = int, 1  // z is both int and 1
+    x, y = Integer  // x and y are both int
+    z = Integer, 1  // z is both int and 1
 
 It may seem strange that you can do `i = Integer, 1`, where you define `i` as both a "type" `Integer` and an "instance" `1` of that type.
 
@@ -359,23 +384,27 @@ print 123 + 1
 A definition that models state uses "record-style" definition and looks like this. 
 
     Person (name) =
-        .name = name
+        . name = name
 
 You can read `Person (name) =` as "`Person` returns an instance of itself".
 
 
 ### Containment
 
-A `.` prefix to an inner-scope definition means "accessible from outside".
+Consider this --
 
     Person (age) =
         min-age = 0
         age > min-age
-        .age = age
+        . age = age
+
+The definitions contained in the indented inner scope, like `age` and `min-age`, are private to that scope.
+
+To make them available from outside, you can create a signature like `. age`. The `.` defines a signature that uses the containing definition as a parameter. You can model containment this way. 
 
     p = Person 25
-    print p.age      // works
-    print p.min-age  // fails
+    print p age      // works
+    print p min-age  // fails
 
 
 ### Immutable
@@ -383,12 +412,10 @@ A `.` prefix to an inner-scope definition means "accessible from outside".
 State is immutable by default. If you want mutability, apply the `Variable` definition.
 
 ```
-a = Integer
-a = 1
+a : Integer = 1
 a = 2  // fails!
 
-b = Integer, Variable
-b = 1
+b : Integer, Variable = 1
 b = 2  // works!
 ```
 
@@ -403,10 +430,10 @@ b = 2  // works!
 
 The common containers are predefined for you.
 
-    b = Bag 1 2 3
-    s = Set 1 2 3
-    os = OrderedSet 1 2 3
-    l = List 1 2 3
+    b = Bag [1 2 3]
+    s = Set [1 2 3]
+    os = OrderedSet [1 2 3]
+    l = List [1 2 3]
 
 | Container   | Ordered | Unique Members or Keys |
 | ----------- |--------|-----------------|
@@ -432,13 +459,15 @@ Maps (a.k.a.associative arrays, dictionaries) are here too.
 Using the indentation for arguments can be more readable.
 
     b = Bag
-        1
-        2
-        3
+        contains
+            1
+            2
+            3
 
-    d = Dict
-        a = 1
-        b = 2
+    d = Map
+        contains
+            a = 1
+            b = 2
 
 ### Member Access
 
@@ -446,9 +475,9 @@ To refer to a member of an ordered container by index, use `[index]`.
 
     list[1]
 
-To refer to a member of a Map by key, use `.`.
+To refer to a member of a Map by key, use `{key}`.
 
-    map.key
+    map{key}
 
 ### Size
 
@@ -462,9 +491,17 @@ Want to know the size of a container? Use `#`.
 Containers are immutable by default. To make one mutable, use `Variable`.
 
 ```
-l = (List 1 2 3), Variable
+l = Variable (List 1 2 3)
 ```
 
+### Constraints
+
+Here are some ways to constraint a container --
+
+    l = List [1 2 3]
+        each this > 0
+
+    l = List of Integer [1 2 3]
 
 ## Conditions
 
@@ -492,9 +529,9 @@ Zoo has `if` expressions. They can have multiple cases and return things. They c
 An `if` can also match multiple conditions at the same time.
 
     show (i) = if
-        i mod 2 == 0   ? 2
-        i mod 10 == 0  ? 10
-        i mod 100 == 0 ? 100
+        i % 2 == 0   ? 2
+        i % 10 == 0  ? 10
+        i % 100 == 0 ? 100
         _              ? 0
 
     show 100  // 2 10 100
@@ -504,9 +541,9 @@ An `if` can also match multiple conditions at the same time.
 Zoo defaults to asychrony unless order is made explicit, so matching is not ordered. If you need an ordered `if`, use `if-ordered`.
 
     show (i) = if-ordered
-        i mod 2 == 0   ? 2
-        i mod 10 == 0  ? 10
-        i mod 100 == 0 ? 100
+        i % 2 == 0   ? 2
+        i % 10 == 0  ? 10
+        i % 100 == 0 ? 100
         _              ? 0
 
     show 100  // 2 10 100
@@ -516,10 +553,10 @@ Zoo defaults to asychrony unless order is made explicit, so matching is not orde
 
 ## Patterns
 
-To make syntax repetition more succinct while still very readable, use `{ }` to separate the pattern from the unique parts. Put an index inside the `{ }`.
+To make syntax repetition more succinct while still very readable, use `$` to separate the pattern from the unique parts. Put an index after the `$`.
 
 ```
-c = if color=={1} then {2}
+c = if color==$1 then $2
     red   #FF0000
     green #00FF00
     blue  #0000FF
@@ -534,7 +571,7 @@ To import definitions into your local scope, use `import`.
 ```
 save (s=string) = ()
     import io
-    io.write s
+    write s
 ```
 
 
@@ -544,13 +581,13 @@ To allow another scope to define in your local definition, use `allow`.
 
 ```
 (a) times (b) = a * b
-    .precedence = Integer \ allow Precedence
+    . precedence = Integer \ allow Precedences
 (a) minus (b) = a - b
-    .precedence = Integer \ allow Precedence
+    . precedence = Integer \ allow Precedences
 
-Precedence =
-    times.precedence = 1
-    minus.precedence = 2
+Precedences =
+    times precedence = 1
+    minus precedence = 2
 ```
 
 This allows separation of concerns while maintaining the definition as the single place to go to know about all its behavior.
@@ -573,7 +610,7 @@ Ranges can be unbounded.
 
 `over` is the main operator for repetition and takes the form `var over params`, where each `param` substitutes for `var` where it's used.
 
-    i over 1 2 3
+    i over [1 2 3]
         print i
 
 It's as if this was happening --
@@ -660,7 +697,7 @@ Definitions can be defined in terms of themselves.
 
 If you need to define a more complicated repetitive control flow, you can use `loop`, `break`, and `continue`.
 
-    a = 1, var
+    a = 1, Variable
     loop
         order
             a = a + 1
@@ -669,16 +706,29 @@ If you need to define a more complicated repetitive control flow, you can use `l
 
 Each inner scope of a `loop` is finished before the next one begins, though the definitions inside a `loop` are *not* ordered by default with-respect-to each other.
 
-## Union Types
+
+## Typing
+
+### Union Types
 
 When you want to define something as "one of these other things", use `|`.
 
     color = red | blue | green
 
-Or if you have a collection, you can use `in`.
-    
-    colors = List red blue green
+### Intersection Types
+
+    dad = Male, Father
+
+### Enumerated Types
+
+    colors = List [red blue green]
     color in colors
+
+### Product type (record type)
+
+    Person (name) = 
+        name = String
+        . name = name
 
 
 ## Conventions
@@ -759,15 +809,15 @@ b =
 print c // fail! cannot access c
 ```
 
-To make a definition accessible, prefix it with a dot.
+To make a definition accessible, you can do an `import`, or you can create a signature involving the definition itself.
 
 ```
 Thing =
-    a = 1 ** 10
-    .b = (a + 1), var
+    a = 1 ** 10, Variable
+    . b = (a + 1), Variable
 
-Thing.a = 1 ** 11  // fails
-Thing.b = a + 2    // works
+Thing a = 1 ** 11  // fails
+Thing b = a + 2    // works
 
 t = Thing
 print t.a  // fails
@@ -826,11 +876,11 @@ Let's model a Queue.
 
     Queue = 
         future = Future
-        .push (item) = ()
+        . push (item) = ()
             future.add item
-        .pop = future.next
+        . pop = future.next
 
-`push` and `pop` are defined relative to each other, through the future.
+`push` and `pop` are defined relative to each other, through the `Future`.
 
 `Future` is not like a *Future* in other languages. It's a special built-in construct for treating "future time" like a data structure of *moments* that you can accumulate. `Future` has these member operations --
 
@@ -842,9 +892,9 @@ Want a version of Queue that doesn't block on pop? Use `else` after `future.next
 
     Queue = 
         future = Future
-        .push (item) = ()
+        . push (item) = ()
             future.add item
-        .pop = future.next else ()
+        . pop = future.next else ()
 
 
 ### Implementations
@@ -865,15 +915,15 @@ If the dependencies of metaprogramming code can be satisfied at compilation time
 Let's use `inspect` to examine the definition `inc (a) = a + 1`.
 
     def = inspect inc
-    def.signature                      // (a Signature)
-    def.signature.name                 // "inc"
-    def.signature.params               // "a"
-    def.signature.left-params          // "a"
-    def.signature.right-params         // 
-    def.meaning                        // (an AST root node)
-    def.meaning.signature.name         // "+"
-    def.meaning.signature.left-params  // "a"
-    def.meaning.signature.right-params // 1
+    def signature                      // (a Signature)
+    def signature name                 // "inc"
+    def signature params               // "a"
+    def signature left-params          // "a"
+    def signature right-params         // 
+    def meaning                        // (an AST root node)
+    def meaning signature name         // "+"
+    def meaning signature left-params  // "a"
+    def meaning signature right-params // 1
 
 Note: in `inspect inc`, `inc` isn't treated as a usage. It's not evaluated. This is because inspect's parameter is a `Definition`. That special definition tells Zoo to not eval the expression.
 

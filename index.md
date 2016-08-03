@@ -59,6 +59,8 @@ We'd like to push the state of the art in practical general-purpose language des
 
 Zoo selectively borrows much from academic work and many existing languages, and adds a few ideas of its own.
 
+Learn about the [design of the language](/language.html#top).
+
 
 ## Definitions
 
