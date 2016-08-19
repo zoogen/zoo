@@ -37,7 +37,7 @@ Zoo is a new kind of open source ecosystem where code automatically floats to ru
 
 ## Low Friction
 
-In the current open source community, there is tremendous propagation friction. For code to be adopted in a system, developers have to discover, learn, integrate, deploy, monitor, and maintain it. That chain is time-intensive and requires a lot of expertise. Zoo tries to automates it all.
+In the current open source community, there is tremendous propagation friction. For code to be adopted in a system, developers have to discover, learn, integrate, deploy, monitor, and maintain it. That chain is time-intensive and requires a lot of expertise. Zoo tries to automate it all.
 
 When one person submits code, it propagates immediately to systems where it's a better solution than whatever that system is currently using. What's "better" in a given system is defined by that system's architects in the Zoo language. Code in the ecosystem competes to satisfy the architect's definitions.
 

@@ -32,13 +32,12 @@ What's relatively unique --
 * Asynchronous-by-default
 * Term rewriting
 * Time semantics
-* Multi-typing (same thing can be multiple types)
+* Multi-typing (one thing can satisfy multiple types)
 * Language profiles
 * Flow typing
 * Prototype-based (not class-based)
 * Automatic concurrency
 * Automatic thread safety
-* Automatic persistent data
 * Predicate dispatch
 
 Zoo also tends to fit these characterizations --
