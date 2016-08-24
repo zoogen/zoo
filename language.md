@@ -434,12 +434,12 @@ The common containers are predefined for you.
     os = OrderedSet [1 2 3]
     l = List [1 2 3]
 
-| Container   | Ordered | Unique Members or Keys |
-| ----------- |--------|-----------------|
-| Bag         | no     | no              |
-| Set         | no     | yes             |
-| OrderedSet  | yes    | yes             |       
-| List        | yes    | no              |
+| Container   | Ordered | Unique Members  |
+| ----------- |---------|-----------------|
+| Bag         | no      | no              |
+| Set         | no      | yes             |
+| OrderedSet  | yes     | yes             |       
+| List        | yes     | no              |
 
 Maps (a.k.a.associative arrays, dictionaries) are here too.
 
@@ -448,12 +448,12 @@ Maps (a.k.a.associative arrays, dictionaries) are here too.
     om = OrderedMap (a=1) (b=2)
     omm = OrderedMultiMap (a=2) (b=2)
 
-| Container   | Ordered | Unique Keys |
-| ----------- |--------|-----------------|
-| Map        | no    | yes  |
-| MultiMap        | no    | no |
-| OrderedMap        | yes    | yes |
-| OrderedMultiMap   | yes    | no |
+| Container         | Ordered | Unique Keys |
+| ----------------- |---------|-------------|
+| Map               | no      | yes         |
+| MultiMap          | no      | no          |
+| OrderedMap        | yes     | yes         |
+| OrderedMultiMap   | yes     | no          |
 
 Using the indentation for arguments can be more readable.
 
