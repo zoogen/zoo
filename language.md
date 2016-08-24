@@ -43,7 +43,7 @@ What's relatively unique --
 Zoo also tends to fit these characterizations --
 
 * Declarative
-* Strongly-typed
+* Typed
 * Stateful
 * Lexically scoped
 * Type inference
